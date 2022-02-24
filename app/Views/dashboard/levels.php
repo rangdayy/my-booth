@@ -39,6 +39,38 @@
                                 <label for="add_name">Name</label>
                                 <input type="text" class="form-control form-control-sm" id="edit_name" name="edit_name" placeholder="Name">
                             </div>
+                            <div class="table-responsive">
+                            <table id="receipt_tbl" class="table table-main">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Form</th>
+                                        <th>Access</th>
+                                        <th>Manage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input">
+                                            access
+                                            <i class="input-helper"></i></label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input">
+                                            manipulate data
+                                            <i class="input-helper"></i></label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row justify-content-end">
                                 <button type="button" id="edit_levels_btn_submit" class="btn btn-primary mr-2">Submit</button>
                                 <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
@@ -137,9 +169,8 @@
                 console.log(data.result);
                 if (data.msg == "success") {
                     getLevels();
-                    swal("Success!", "data saved with ID "+data.result+"!", "success");
-                }
-                else{
+                    swal("Success!", "data saved with ID " + data.result + "!", "success");
+                } else {
                     swal("Failed!", "there's something wrong while saving data!", "danger");
                 }
             },
@@ -173,12 +204,11 @@
             success: function(data) {
                 if (data.msg == "success") {
                     getLevels();
-                    swal("Success!", "data with ID "+data.result+" successfully updated!", "success");
-                }
-                else{
+                    swal("Success!", "data with ID " + data.result + " successfully updated!", "success");
+                } else {
                     swal("Failed!", "there's something wrong while saving data!", "danger");
                 }
-                
+
             },
             complete: function(data) {
                 $('#edit_form')[0].reset();
@@ -235,9 +265,8 @@
             success: function(data) {
                 if (data.msg = "success") {
                     getLevels();
-                    swal("Success!", "data with ID "+data.result+" successfully deleted!", "success");
-                }
-                else{
+                    swal("Success!", "data with ID " + data.result + " successfully deleted!", "success");
+                } else {
                     swal("Failed!", "there's something wrong while deleting data!", "danger");
                 }
             },

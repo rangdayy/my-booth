@@ -109,6 +109,12 @@
 
                                     </tr>
                                 <?php endforeach ?>
+                            <?php else : ?>
+                                <tr>
+                                    <td colspan="5" class="table-actions text-center"> there's no data yet!</td>
+                                    
+
+                                </tr>
                             <?php endif ?>
                         </tbody>
                     </table>
@@ -168,7 +174,7 @@
                     });
                     $('#receipt_tbl tbody').html(receipt);
                     $('#costumer_money').text(costumer_money + '.00')
-                    $('#change').text((costumer_money - total) +'.00')
+                    $('#change').text((costumer_money - total) + '.00')
                     $('#price_total').text(total + '.00')
                 } else {
                     tableEmpty('#receipt_tbl');
