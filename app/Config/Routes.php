@@ -52,6 +52,7 @@ $routes->get('levels/list', 'Levels::levelsList');
 $routes->post('levels/add', 'Levels::levelsAdd');
 $routes->post('levels/delete', 'Levels::levelsDelete');
 $routes->post('levels/edit', 'Levels::levelsEdit');
+$routes->post('levels/security', 'Levels::levelSecurity');
 $routes->get('transaction', 'Transaction::transaction', ['filter' => 'authGuard']);
 $routes->post('transaction/add', 'Transaction::transactionAdd');
 $routes->get('report', 'Transaction::report', ['filter' => 'authGuard']);

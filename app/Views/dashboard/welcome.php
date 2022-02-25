@@ -67,7 +67,7 @@
                 <div class="card card-light-danger">
                     <div class="card-body">
                         <p class="mb-4">Weekly Transactions</p>
-                        <p class="font-weight-bold">0 Receipts</p>
+                        <p class="font-weight-bold"><?= $weekly_receipts?> Receipts</p>
                         <!-- <p>you served 0 people</p> -->
                     </div>
                 </div>

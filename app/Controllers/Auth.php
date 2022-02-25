@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Booth;
 use App\Models\User;
 use App\Models\Level;
+use App\Models\FormsAccess;
 
 class Auth extends BaseController
 {
@@ -48,6 +49,7 @@ class Auth extends BaseController
             $booth = new Booth();
             $user  = new User();
             $level  = new Level();
+            $security  = new FormsAccess();
             $booth->insert([
                 'nama_booth' => strtoupper($this->request->getVar('booth_name'))
             ]);
@@ -59,6 +61,7 @@ class Auth extends BaseController
                 'nama_jabatan' => 'OWNER',
                 'id_booth' => $id_booth
             ]);
+            $security->insert_security($id_level);
             $user->insert([
                 'id_user' => $id_user,
                 'nama_user' => strtoupper($this->request->getVar('name')),

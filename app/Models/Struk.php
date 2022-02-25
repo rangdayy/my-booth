@@ -29,9 +29,14 @@ class Struk extends Model
         return  $this->selectCount('id_struk')->where(array('id_booth'=>$id_booth, 'DATE_FORMAT(tanggal_transaksi, "%d-%m-%Y")'=> $date) )->countAllResults();
     }
 
-    public function todays_income($id_booth, $date)
+    public function income_by_date($id_booth, $date)
     {
         return  $this->selectSum('harga_total')->where(array('id_booth'=>$id_booth, 'DATE_FORMAT(tanggal_transaksi, "%d-%m-%Y")'=> $date) )->first();
+    }
+
+    public function count_receipts($id_booth)
+    {
+        return  $this->select('id_struk')->where(array('id_booth'=>$id_booth, 'tanggal_transaksi'=> 'DATE(NOW()) - INTERVAL 7 DAY') )->countAll();
     }
 
 

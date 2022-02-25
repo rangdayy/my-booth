@@ -27,8 +27,8 @@
         </div>
     </div>
 </div>
-<div class="modal modal-auto-h fade modal_main" id="edit_levels_modal" tabindex="-1" role="dialog" aria-labelledby="edit_levels_modalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal fade modal_main" id="edit_levels_modal" tabindex="-1" role="dialog" aria-labelledby="edit_levels_modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
@@ -39,37 +39,46 @@
                                 <label for="add_name">Name</label>
                                 <input type="text" class="form-control form-control-sm" id="edit_name" name="edit_name" placeholder="Name">
                             </div>
-                            <div class="table-responsive">
-                            <table id="receipt_tbl" class="table table-main">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Form</th>
-                                        <th>Access</th>
-                                        <th>Manage</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" class="form-check-input">
-                                            access
-                                            <i class="input-helper"></i></label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" class="form-check-input">
-                                            manipulate data
-                                            <i class="input-helper"></i></label>
-                                    </div>
-                                </div>
+                            <div class="table-responsive my-3">
+                                <table id="form_tbl" class="table table-main">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Form</th>
+                                            <th>Access</th>
+                                            <th>Manage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if ($forms) : ?>
+                                            <?php foreach ($forms as $form) : ?>
+                                                <tr>
+                                                    <td class="font-weight-bold"><?php echo $form['id_form']; ?></td>
+                                                    <td><?php echo $form['nama_form']; ?></td>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="checkbox_access[<?php echo $form['id_form']; ?>]" id="<?php echo $form['id_form']; ?>_access">
+                                                                <i class="input-helper"></i></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input type="checkbox" class="form-check-input" name="checkbox_manage[<?php echo $form['id_form']; ?>]" id="<?php echo $form['id_form']; ?>_manage">
+                                                                <i class="input-helper"></i></label>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+                                            <?php endforeach ?>
+                                        <?php else : ?>
+                                            <tr>
+                                                <td colspan="4" class="table-actions text-center"> there's no data yet!</td>
+                                            </tr>
+                                        <?php endif ?>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="row justify-content-end">
                                 <button type="button" id="edit_levels_btn_submit" class="btn btn-primary mr-2">Submit</button>
@@ -130,9 +139,11 @@
             addLevels()
         });
         $(document).on("click", "button[btn='edit_levels_btn']", function() {
+            $('input[type="checkbox"]').prop('checked', false);
             getLevels();
             let id_level = $(this).closest('tr').find("td:eq(1)").text();
             let nama_jabatan = $(this).closest('tr').find("td:eq(2)").text();
+            getAccessForms(id_level)
             $('#edit_name').attr('id_level', id_level);
             $('#edit_name').val(nama_jabatan);
             $('#edit_levels_modal').modal('show');
@@ -202,6 +213,7 @@
 
             },
             success: function(data) {
+                console.log(data.result)
                 if (data.msg == "success") {
                     getLevels();
                     swal("Success!", "data with ID " + data.result + " successfully updated!", "success");
@@ -268,6 +280,35 @@
                     swal("Success!", "data with ID " + data.result + " successfully deleted!", "success");
                 } else {
                     swal("Failed!", "there's something wrong while deleting data!", "danger");
+                }
+            },
+
+        });
+    }
+
+    function getAccessForms(id_level) {
+        $.ajax({
+            url: '<?php echo base_url('levels/security'); ?>',
+            data: {
+                id_level: id_level
+            },
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {},
+            success: function(data) {
+                if (data.result.length != 0) {
+                    $.each(data.result, function(index, item) {
+                        $('#form_tbl tbody').find('input[type="checkbox"]').each(function(index, checkbox) {
+                            if($(this).attr('id') == item.id_form + '_access' && item.access == 'T'){
+                                $(this).prop('checked', true);
+                            }
+                            if($(this).attr('id') == item.id_form + '_manage' && item.action == 'T'){
+                                $(this).prop('checked', true);
+                            }
+                        });
+                    });
+                } else {
+                    // swal("Failed!", "there's something wrong while fetching data!", "danger");
                 }
             },
 
