@@ -25,4 +25,8 @@ class FormsAccess extends Model
         
         return $this->insertBatch($security);
     }
+
+    public function find_access($id_level, $id_form){
+        return $this->where(array('id_level'=>$id_level,'id_form'=>$id_form))->first();
+    }
 }

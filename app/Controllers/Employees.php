@@ -5,12 +5,23 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\User;
 use App\Models\Level;
+use App\Models\FormsAccess;
 
 class Employees extends BaseController
 {
     public function employees()
     {
-        return view('dashboard/employees');
+        $form = 'F001';
+        $user = new User();
+        $security = new FormsAccess();
+        $id_level = $user->get_user_data(session()->get('id_user'));
+        $access = $security->find_access($id_level['id_level'], $form);
+        // return view('dashboard/employees', $access);
+        if ($access['access'] == 'T') {
+            return view('dashboard/employees');
+        } else {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        }
     }
     public function employeesList()
     {
@@ -78,9 +89,8 @@ class Employees extends BaseController
         if ($this->request->isAJAX()) {
             $user = new user();
             $id_user = service('request')->getPost('id_user');
-            $user->where('id_user', $id_user)->delete();           
+            $user->where('id_user', $id_user)->delete();
             return json_encode(['msg' => 'success', 'csrf' => csrf_hash(), 'result' => $id_user]);
-
         }
     }
 }

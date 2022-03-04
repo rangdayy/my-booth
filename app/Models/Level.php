@@ -16,7 +16,7 @@ class Level extends Model
     {
         return  $this->where('id_booth', $id_booth)->findAll();
     }
-
+    
     public function get_latest_id($id_booth)
     {
         return  $this->select('id_level')->like('id_level','L' . $id_booth.'B', 'both')->orderby('id_level','DESC')->first();
